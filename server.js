@@ -2,6 +2,7 @@ var express = require ('express');
 var app = express();
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var ejs = require('ejs')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var ip = "localhost";
@@ -45,17 +46,29 @@ app.set("view engine","ejs");
 //Routes
 
 app.get("/", function(req, res) {
-  res.render("./landingPage");
+  Message.find({}, function(err, allMessages) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("landingPage.ejs");
+    }
+  });
 });
 
 app.post("/", function(req, res) {
-    var name = req.body.name;
-    var text = req.body.text;
-    var newmessage = { name: name, text: text };
-    Message.create(newmessage, function() {
-      res.redirect("/");
-  });
+  var message = new Message(req.body);
+  message.save((err) =>{
+    if(err)
+      sendStatus(500);
+    io.emit('message', req.body);
+    res.redirect("/");
+  })
 });
+
+
+io.on('connection', () =>{
+  console.log('a user is connected')
+})
 
 
 app.listen(port, ip, function () {

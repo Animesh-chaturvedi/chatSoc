@@ -1,4 +1,11 @@
 <%- include ('partials/header'); %>
+<script src="/socket.io/socket.io.js">
+   var socket = io();
+
+socket.on('message', function(message){
+      console.log(message)
+})
+</script>
 <div class="container">
     <div class="row">
       <h1 style="text-align: center">ChatSoc</h1>
