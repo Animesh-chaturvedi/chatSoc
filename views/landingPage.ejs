@@ -1,9 +1,10 @@
 <%- include ('partials/header'); %>
 <script src="">
+  console.log("hello");
    var socket = io();
 
 socket.on('message', function(message){
-      console.log(message)
+      console.log(message);
 })
 </script>
 <div class="container">
@@ -34,5 +35,5 @@ socket.on('message', function(message){
       </div>
     </div>
   </div>
-
+<%= console.log(message) %>
 <%- include('partials/footer'); %>
